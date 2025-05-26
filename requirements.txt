@@ -1,0 +1,14 @@
+numpy
+pandas
+scikit-learn
+matplotlib
+tqdm
+transformers
+sentence-transformers
+arxiv
+pdfminer.six
+torch>=2.0
+pettingzoo
+gymnasium
+ray[rllib]
+wandb
