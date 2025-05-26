@@ -1,88 +1,107 @@
 
-# 📚 Automated Systematic Literature Review using PRISMA & Multi-Agent Reinforcement Learning
-
-This project is a **proof-of-concept (PoC)** system for automating systematic literature reviews in compliance with the **PRISMA guidelines**, using **Multi-Agent Reinforcement Learning (MARL)** with **Centralized Training and Decentralized Execution (CTDE)**.
-
-It simulates expert behavior in:
-- Paper Search (via arXiv)
-- Title/Abstract Filtering
-- Full-Text Review
-- PRISMA Rule Compliance
-
-All papers are retrieved from [arXiv.org](https://arxiv.org), filtered and scored by reinforcement learning agents trained with human feedback and reward shaping.
 ---
 
-## 🚀 Features
 
-- 🔎 arXiv search for academic papers (2020–2025)
-- 🤖 Modular agents (search, abstract, full text)
-- 🧠 DQN agents with replay buffer, epsilon decay, and target networks
-- 📊 PRISMA compliance scoring
-- 💡 Streamlit UI for interactive usage
-- 💾 Export results as CSV/JSON
 
----
-
-## 🧠 Architecture Overview
 ```markdown
-User Input
-│
-├──▶ Search Agent ──▶ Title/Abstract Agent ──▶ Full-Text Agent
-│                                            │
-└───────────────────────────────────────────▶ PRISMA Checker
+# 📚 PRISMA-MARL: Automated Systematic Literature Review with Multi-Agent Reinforcement Learning
 
-````
+This project is a **proof-of-concept (PoC)** for automating systematic literature reviews based on **PRISMA guidelines**, using a **Multi-Agent Reinforcement Learning (MARL)** system. Each agent operates independently and is trained using **agent-specific reward loops**, evaluated via a dynamic **PRISMA Checker**. All documents are pulled from [arXiv.org](https://arxiv.org).
+
+---
+
+## ✨ Features
+
+- 🔍 Automated arXiv search based on topic and date range
+- 🧠 Multi-agent system: search, abstract filter, full-text decision
+- 🧪 PRISMA-based reward functions for each agent
+- 🔁 Centralized Training with Decentralized Execution (CTDE)
+- 📊 Streamlit web interface + CSV/JSON export
+- 💾 Model saving/loading with live evaluation
+
+---
+
+## ⚙️ Architecture (Reward Loop)
+
+```
+
+```
+                  +--------------------------+
+                  |        User Input        |
+                  +--------------------------+
+                           |
+           +---------------+---------------+---------------+
+           |               |               |               |
+    +------+-----+  +------+-----+  +------+-----+  +------+-----+
+    | Search Agent|  | Abstract Agent|  | FullText Agent|  |   ...      |
+    +------+-----+  +------+-----+  +------+-----+  +------+-----+
+           |               |               |
+    +------+-----+  +------+-----+  +------+-----+
+    | PRISMA Eval |  | PRISMA Eval |  | PRISMA Eval |
+    +------+-----+  +------+-----+  +------+-----+
+           |               |               |
+     Reward + Replay  Reward + Replay  Reward + Replay
+           ↑               ↑               ↑
+           +---------------+---------------+
+                   (Repeat per epoch)
+```
+
+```
+
+---
 
 ## 📁 Project Structure
 
-```bash
+```
+
 prisma\_marl\_project/
-├── agents/                   # Modular DQN-based agents
+├── agents/                   # Modular DQN agents
 │   ├── search\_agent.py
-│   ├── full\_text\_agent.py
 │   ├── title\_abstract\_filter.py
+│   ├── full\_text\_agent.py
 │   ├── prisma\_checker.py
 │   └── shared\_enhanced\_dqn.py
 │
-├── rewards/                 # Advanced reward system with feedback
+├── rewards/                 # Custom PRISMA reward logic
 │   └── enhanced\_reward\_system.py
 │
-├── trainer/                 # Agent training loop
+├── trainer/                 # Training pipeline
 │   └── train\_agents.py
 │
-├── utils/                   # Helper functions
+├── utils/                   # ArXiv interface, tokenizer, etc.
 │   ├── arxiv\_interface.py
-│   ├── tokenizer.py
 │   └── logger.py
 │
-├── models/                  # Saved DQN model checkpoints
+├── models/                  # Saved PyTorch model weights
 │
 ├── app.py                   # Streamlit UI
-├── main.py                  # CLI runner
-├── requirements.txt         # Python dependencies
-├── results.csv              # Saved output from main/app
+├── main.py                  # CLI review pipeline
+├── requirements.txt         # Dependencies
+├── README.md
 
 ````
 
 ---
 
-## ⚙️ Installation & Setup
+## 🚀 Getting Started
 
-### 1. Clone the Repository
+### ✅ 1. Clone the Repo
 
 ```bash
 git clone https://github.com/MOsama10/prisma-marl-review.git
 cd prisma-marl-review
 ````
 
-### 2. Create and Activate Virtual Environment
+### ✅ 2. Create & Activate Virtual Environment
 
 ```bash
 python -m venv venv
-venv\Scripts\activate  # Windows
+venv\Scripts\activate      # Windows
+# or
+source venv/bin/activate   # macOS/Linux
 ```
 
-### 3. Install Dependencies
+### ✅ 3. Install Requirements
 
 ```bash
 pip install --upgrade pip
@@ -91,85 +110,79 @@ pip install -r requirements.txt
 
 ---
 
-## 🧪 Usage
+## 🔁 Training Agents (Reward Loop)
 
-### 🔹 CLI Mode
-
-```bash
-python main.py
-```
-
-You'll be asked to enter:
-
-* Research topic
-* Start year (e.g. 2020)
-* End year (e.g. 2025)
-
-The output will be saved to `results.csv`.
-
-### 🔹 Streamlit Web UI
-
-```bash
-streamlit run app.py
-```
-
-Explore and export your results visually.
-
----
-
-## 🎯 Training Agents
-
-You can train agents using the `trainer` module:
+Train the MARL agents with real arXiv data and PRISMA feedback:
 
 ```bash
 python trainer/train_agents.py
 ```
 
-This trains the agents with simulated feedback and saves models to `models/`.
+📦 Trained models are saved to `models/`.
 
 ---
 
-## 📦 Output
+## 🧪 CLI Inference Mode
 
-* **results.csv** – Top papers (title, year, abstract, link, decision)
-* **.pth files** – Saved weights for each agent
-* **PRISMA score** – Compliance metric between 0.0 and 1.0
+Run the review pipeline interactively from terminal:
 
----
+```bash
+python main.py
+```
 
-## 📝 PRISMA Compliance Explained
-
-The PRISMA score is computed using an 8-point checklist that covers:
-
-* Search documentation
-* Inclusion/exclusion clarity
-* Study selection, extraction, synthesis
-* Quality assessment
-
-A score of 1.0 indicates **perfect compliance**.
+✔ Enter a topic and year range
+📄 Outputs top 10 papers to `results.csv`
+📊 Shows PRISMA compliance score
 
 ---
 
-## 📌 Future Enhancements
+## 🌐 Streamlit Web Interface
 
-* RL fine-tuning with human-in-the-loop feedback (RLHF)
-* Integration with PubMed, Semantic Scholar APIs
-* Auto-summarization of included papers
-* Visual PRISMA flow diagrams
-* Hugging Face or Streamlit Cloud deployment
+```bash
+streamlit run app.py
+```
+
+Features:
+
+* Topic input + date range
+* Run reviews interactively
+* Download CSV/JSON
+* Train agents from sidebar
+* Visual PRISMA score and relevance ranking
+
+---
+
+## 📊 PRISMA Compliance Scoring
+
+Each agent receives structured feedback on:
+
+* Search coverage and strategy
+* Abstract clarity and inclusion accuracy
+* Methodology and results from full-text
+* Synthesis and limitation discussion
+
+The global score is calculated from 8 standard PRISMA checkpoints.
+
+---
+
+## 💡 Future Enhancements
+
+* [ ] Reinforcement Learning with Human Feedback (RLHF)
+* [ ] Support for PubMed and Semantic Scholar
+* [ ] Full PDF parsing for deep analysis
+* [ ] Integration with Hugging Face Spaces
+* [ ] PRISMA diagram generation
+* [ ] Summary generation using LLMs
 
 ---
 
 ## 👤 Author
 
 **Mohamed Osama**
-[GitHub @MOsama10](https://github.com/MOsama10)
+GitHub: [@MOsama10](https://github.com/MOsama10)
 
----
 
-## 📄 License
+````
 
-This project is licensed under the **MIT License**.
 
----
 
