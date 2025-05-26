@@ -1,8 +1,3 @@
-Absolutely! Below is the complete, professional `README.md` file tailored to your enhanced **PRISMA-MARL** project — with modular agents, enhanced rewards, training, and Streamlit UI.
-
----
-
-### ✅ Final `README.md`
 
 ```markdown
 # 📚 Automated Systematic Literature Review using PRISMA & Multi-Agent Reinforcement Learning
