@@ -51,20 +51,20 @@ This project is a **proof-of-concept (PoC)** for automating systematic literatur
 
 prisma_marl_project/
 ├── agents/                   # Modular DQN agents
-│   ├── search\_agent.py
-│   ├── title\_abstract\_filter.py
-│   ├── full\_text\_agent.py
-│   ├── prisma\_checker.py
-│   └── shared\_enhanced\_dqn.py
+│   ├── search_agent.py
+│   ├── title_abstract_filter.py
+│   ├── full_text_agent.py
+│   ├── prisma_checker.py
+│   └── shared_enhanced_dqn.py
 │
 ├── rewards/                 # Custom PRISMA reward logic
-│   └── enhanced\_reward\_system.py
+│   └── enhanced_reward_system.py
 │
 ├── trainer/                 # Training pipeline
-│   └── train\_agents.py
+│   └── train_agents.py
 │
 ├── utils/                   # ArXiv interface, tokenizer, etc.
-│   ├── arxiv\_interface.py
+│   ├── arxiv_interface.py
 │   └── logger.py
 │
 ├── models/                  # Saved PyTorch model weights
