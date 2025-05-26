@@ -160,17 +160,6 @@ The global score is calculated from 8 standard PRISMA checkpoints.
 
 ---
 
-## 💡 Future Enhancements
-
-* [ ] Reinforcement Learning with Human Feedback (RLHF)
-* [ ] Support for PubMed and Semantic Scholar
-* [ ] Full PDF parsing for deep analysis
-* [ ] Integration with Hugging Face Spaces
-* [ ] PRISMA diagram generation
-* [ ] Summary generation using LLMs
-
----
-
 ## 👤 Author
 
 **Mohamed Osama**
