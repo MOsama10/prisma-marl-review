@@ -1,145 +1,170 @@
-
 ```markdown
-# Automated Systematic Literature Review System with PRISMA and Multi-Agent RL
+#  Automated Systematic Literature Review using PRISMA & Multi-Agent Reinforcement Learning
 
-## Project Overview
+This project is a **proof-of-concept (PoC)** system for automating systematic literature reviews in compliance with the **PRISMA guidelines**, using **Multi-Agent Reinforcement Learning (MARL)** with **Centralized Training and Decentralized Execution (CTDE)**.
 
-This system provides an automated pipeline for conducting systematic literature reviews in compliance with PRISMA (Preferred Reporting Items for Systematic Reviews and Meta-Analyses) guidelines. Leveraging Multi-Agent Reinforcement Learning (MARL) with Centralized Training and Decentralized Execution (CTDE), it simulates expert decision-making across all stages of the literature review process.
+It simulates expert behavior in:
+- Paper Search (via arXiv)
+- Title/Abstract Filtering
+- Full-Text Review
+- PRISMA Rule Compliance
 
-## Key Features
+All papers are retrieved from [arXiv.org](https://arxiv.org), filtered and scored by reinforcement learning agents trained with human feedback and reward shaping.
 
-- **Automated Paper Retrieval**: Live search from arXiv.org with custom topic and date filters
-- **Multi-Stage Review Pipeline**: Four specialized agents handle different review phases
-- **PRISMA Compliance**: Built-in adherence to systematic review reporting standards
-- **Results Export**: CSV output with complete paper metadata and relevance scores
+---
 
-## System Architecture
+##  Features
 
-```mermaid
-graph LR
-    A[User Input] --> B[Search Agent]
-    B --> C[Title/Abstract Filter]
-    C --> D[Full-Text Agent]
-    D --> E[PRISMA Checker]
-    E --> F[(Results CSV)]
+-  arXiv search for academic papers (2020–2025)
+-  Modular agents (search, abstract, full text)
+-  DQN agents with replay buffer, epsilon decay, and target networks
+-  PRISMA compliance scoring
+-  Streamlit UI for interactive usage
+-  Export results as CSV/JSON
+
+---
+
+##  Architecture Overview
+
 ```
 
-## Project Structure
+User Input
+│
+├──▶ Search Agent ──▶ Title/Abstract Agent ──▶ Full-Text Agent
+│                                            │
+└───────────────────────────────────────────▶ PRISMA Checker
 
 ```
-prisma-marl-review/
-├── agents/                   # Reinforcement learning agents
-│   ├── search_agent.py       # Paper retrieval agent
-│   ├── title_abstract_filter.py  # Initial screening
-│   ├── full_text_agent.py    # Content analysis
-│   └── prisma_checker.py     # Compliance verification
-│
-├── env/                      # Custom multi-agent environment
-│   └── prisma_env.py         # PettingZoo implementation
-│
-├── utils/                    # Support modules
-│   ├── arxiv_interface.py    # API communication
-│   ├── tokenizer.py          # Text processing
-│   └── logger.py             # System logging
-│
-├── configs/                  # Configuration files
-│   └── default_config.yaml   # Hyperparameters
-│
-├── notebooks/                # Example notebooks
-│   └── demo_pipeline.ipynb   # Demonstration Jupyter notebook
-│
-├── main.py                   # Main application entry point
-├── requirements.txt          # Dependency specification
-└── README.md                 # Project documentation
+
+---
+
+##  Project Structure
+
 ```
 
-## Installation Guide
+prisma\_marl\_project/
+├── agents/                   # Modular DQN-based agents
+│   ├── search\_agent.py
+│   ├── full\_text\_agent.py
+│   ├── title\_abstract\_filter.py
+│   ├── prisma\_checker.py
+│   └── shared\_enhanced\_dqn.py
+│
+├── rewards/                 # Advanced reward system with feedback
+│   └── enhanced\_reward\_system.py
+│
+├── trainer/                 # Agent training loop
+│   └── train\_agents.py
+│
+├── utils/                   # Helper functions
+│   ├── arxiv\_interface.py
+│   ├── tokenizer.py
+│   └── logger.py
+│
+├── models/                  # Saved DQN model checkpoints
+│
+├── app.py                   # Streamlit UI
+├── main.py                  # CLI runner
+├── requirements.txt         # Python dependencies
+├── results.csv              # Saved output from main/app
 
-### Prerequisites
-- Python 3.8 or higher
-- pip package manager
-- Git version control
+````
 
-### Setup Instructions
+---
 
-1. Clone the repository:
+##  Installation & Setup
+
+### 1. Clone the Repository
+
 ```bash
 git clone https://github.com/MOsama10/prisma-marl-review.git
 cd prisma-marl-review
-```
+````
 
-2. Create and activate a virtual environment:
+### 2. Create and Activate Virtual Environment
+
 ```bash
 python -m venv venv
-source venv/bin/activate  # Linux/MacOS
-.\venv\Scripts\activate  # Windows
+venv\Scripts\activate  # Windows
 ```
 
-3. Install required dependencies:
+### 3. Install Dependencies
+
 ```bash
+pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Usage Instructions
+---
 
-Execute the main application:
+##  Usage
+
+###  CLI Mode
+
 ```bash
 python main.py
 ```
 
-The system will prompt for:
-1. Research topic (e.g., "reinforcement learning in healthcare")
-2. Start year for publication filter
-3. End year for publication filter
+You'll be asked to enter:
 
-Output includes:
-- Progress logs in terminal
-- Final results in `results.csv`
-- PRISMA compliance score
+* Research topic
+* Start year (e.g. 2020)
+* End year (e.g. 2025)
 
-## Example Workflow
+The output will be saved to `results.csv`.
 
-```plaintext
-$ python main.py
-Enter research topic: transformer architectures
-Start year: 2020
-End year: 2023
+###  Streamlit Web UI
 
-[INFO] Retrieved 127 papers from arXiv (2020-2023)
-[INFO] Title/abstract screening complete: 42 papers remaining
-[INFO] Full-text analysis completed: 18 papers meet criteria
-[SUCCESS] PRISMA compliance: 89.2% | Results saved to results.csv
+```bash
+streamlit run app.py
 ```
 
-## Technical Specifications
+Explore and export your results visually.
 
-### Core Dependencies
+---
 
-| Component | Key Packages |
-|-----------|--------------|
-| Machine Learning | PyTorch 2.0+, Transformers, Sentence-Transformers |
-| Reinforcement Learning | PettingZoo, Gymnasium, Ray RLlib |
-| Data Processing | pandas, NumPy, pdfminer.six |
-| APIs | arxiv, requests |
+##  Training Agents
 
-## Development Roadmap
+You can train agents using the `trainer` module:
 
-### Current Features
-- [x] arXiv paper retrieval pipeline
-- [x] Basic MARL agent implementation
-- [x] PRISMA compliance scoring
-
-### Planned Enhancements
-- [ ] Integration with PubMed API
-- [ ] Human-in-the-loop feedback system
-- [ ] Advanced RL training with experience replay
-- [ ] Web-based demo deployment
-
-## Contact Information
-
-**Project Maintainer**: Mohamed Osama  
-**Email**: M.Osaammaa@gmailcom  
-**GitHub**: [https://github.com/MOsama10](https://github.com/MOsama10)  
-**Institution**: Nile University 
+```bash
+python trainer/train_agents.py
 ```
+
+This trains the agents with simulated feedback and saves models to `models/`.
+
+---
+
+##  Output
+
+* **results.csv** – Top papers (title, year, abstract, link, decision)
+* **.pth files** – Saved weights for each agent
+* **PRISMA score** – Compliance metric between 0.0 and 1.0
+
+---
+
+##  PRISMA Compliance Explained
+
+The PRISMA score is computed using an 8-point checklist that covers:
+
+* Search documentation
+* Inclusion/exclusion clarity
+* Study selection, extraction, synthesis
+* Quality assessment
+
+A score of 1.0 indicates **perfect compliance**.
+
+---
+
+
+##  Author
+
+**Mohamed Osama**
+[GitHub @MOsama10](https://github.com/MOsama10)
+
+---
+
+
+
+---
 
