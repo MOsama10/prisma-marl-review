@@ -27,7 +27,6 @@ All papers are retrieved from [arXiv.org](https://arxiv.org), filtered and score
 
 ## 🧠 Architecture Overview
 
-```bash
 User Input
 │
 ├──▶ Search Agent ──▶ Title/Abstract Agent ──▶ Full-Text Agent
