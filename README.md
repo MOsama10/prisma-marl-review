@@ -166,7 +166,6 @@ The global score is calculated from 8 standard PRISMA checkpoints.
 GitHub: [@MOsama10](https://github.com/MOsama10)
 
 
-````
 
 
 
