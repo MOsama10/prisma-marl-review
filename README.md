@@ -1,9 +1,5 @@
 
----
 
-
-
-```markdown
 # 📚 PRISMA-MARL: Automated Systematic Literature Review with Multi-Agent Reinforcement Learning
 
 This project is a **proof-of-concept (PoC)** for automating systematic literature reviews based on **PRISMA guidelines**, using a **Multi-Agent Reinforcement Learning (MARL)** system. Each agent operates independently and is trained using **agent-specific reward loops**, evaluated via a dynamic **PRISMA Checker**. All documents are pulled from [arXiv.org](https://arxiv.org).
@@ -23,9 +19,9 @@ This project is a **proof-of-concept (PoC)** for automating systematic literatur
 
 ## ⚙️ Architecture (Reward Loop)
 
-```
+```markdown
 
-```
+
                   +--------------------------+
                   |        User Input        |
                   +--------------------------+
@@ -46,13 +42,12 @@ This project is a **proof-of-concept (PoC)** for automating systematic literatur
                    (Repeat per epoch)
 ```
 
-```
+
 
 ---
 
 ## 📁 Project Structure
-
-```
+```markdown
 
 prisma\_marl\_project/
 ├── agents/                   # Modular DQN agents
