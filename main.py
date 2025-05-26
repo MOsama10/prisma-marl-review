@@ -21,33 +21,48 @@ def main():
         print("❌ No papers found.")
         return
 
+    # Agents
     search_agent = SearchAgent()
     abstract_agent = TitleAbstractFilterAgent()
     fulltext_agent = FullTextAgent()
     prisma_checker = PRISMAChecker()
     reward_system = EnhancedRewardSystem()
 
-    data = []
-    for paper in papers:
-        abstract_embedding = reward_system.embed_text(paper.summary)
-        action = abstract_agent.act(abstract_embedding, training=False)
-        decision = "Include" if action == 2 else "Maybe" if action == 1 else "Exclude"
+    query_embedding = reward_system.embed_text(topic)
+    search_reward = prisma_checker.evaluate_search_reward(papers, query_embedding)
 
-        data.append({
+    print(f"🔁 Search Reward: {search_reward:.3f}")
+
+    results = []
+    for paper in papers:
+        paper_embed = reward_system.embed_text(paper.summary)
+        abstract_action = abstract_agent.act(paper_embed, training=False)
+        abstract_reward = prisma_checker.evaluate_abstract_reward(paper.summary, abstract_action)
+
+        fulltext_action = fulltext_agent.act(paper_embed, training=False)
+        fulltext_reward = prisma_checker.evaluate_fulltext_reward(paper.summary, fulltext_action)
+
+        final_score = (abstract_reward + fulltext_reward) / 2
+
+        decision = "Include" if abstract_action == 2 else "Maybe" if abstract_action == 1 else "Exclude"
+
+        results.append({
             "Title": paper.title,
             "Year": paper.published.year,
             "URL": paper.entry_id,
             "Decision": decision,
             "Abstract": paper.summary,
+            "Score": round(final_score, 3),
             "Authors": ", ".join([a.name for a in paper.authors])
         })
 
-    df = pd.DataFrame(data)
+    # Sort and save
+    df = pd.DataFrame(results).sort_values(by="Score", ascending=False).head(10)
     df.to_csv("results.csv", index=False)
-    print(f"✅ Saved {len(df)} results to results.csv")
+    print("✅ Saved top 10 papers to results.csv")
 
-    # Compute PRISMA score
-    score = prisma_checker.compute_prisma_reward({
+    # PRISMA overview
+    prisma_score = prisma_checker.evaluate_prisma_score({
         'search_strategy_documented': 1,
         'inclusion_criteria_clear': 1,
         'exclusion_criteria_clear': 1,
@@ -58,7 +73,7 @@ def main():
         'limitations_discussed': 0.6
     })
 
-    print(f"📊 PRISMA Compliance Score: {score:.2f}")
+    print(f"📊 PRISMA Compliance Score: {prisma_score:.2f}")
 
 if __name__ == "__main__":
     main()
