@@ -1,9 +1,21 @@
 # agents/prisma_checker.py
 
+from rewards.enhanced_reward_system import EnhancedRewardSystem
+
 class PRISMAChecker:
-    def compute_global_reward(self, rewards):
+    def __init__(self):
+        self.reward_system = EnhancedRewardSystem()
+
+    def compute_global_reward(self, agent_rewards: dict) -> float:
         """
-        Accepts a dict of agent rewards and returns a global reward score.
-        Example: {'search': 0.8, 'title_abstract': 0.9, 'full_text': 0.7}
+        Compute the average of all agent rewards as a global cooperative reward.
         """
-        return sum(rewards.values()) / len(rewards) if rewards else 0.0
+        if not agent_rewards:
+            return 0.0
+        return sum(agent_rewards.values()) / len(agent_rewards)
+
+    def compute_prisma_reward(self, review_data: dict) -> float:
+        """
+        Compute compliance score based on PRISMA checklist.
+        """
+        return self.reward_system.compute_prisma_reward(review_data)
