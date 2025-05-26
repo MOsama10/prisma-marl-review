@@ -32,21 +32,17 @@ All papers are retrieved from [arXiv.org](https://arxiv.org), filtered and score
 
 ## 🧠 Architecture Overview
 
-```
-
+```bash
 User Input
 │
 ├──▶ Search Agent ──▶ Title/Abstract Agent ──▶ Full-Text Agent
 │                                            │
 └───────────────────────────────────────────▶ PRISMA Checker
 
-```
-
----
+````
 
 ## 📁 Project Structure
 
-```
 ```bash
 prisma\_marl\_project/
 ├── agents/                   # Modular DQN-based agents
@@ -74,7 +70,6 @@ prisma\_marl\_project/
 ├── requirements.txt         # Python dependencies
 ├── results.csv              # Saved output from main/app
 
-````
 ````
 
 ---
