@@ -1,5 +1,4 @@
 
-```markdown
 # 📚 Automated Systematic Literature Review using PRISMA & Multi-Agent Reinforcement Learning
 
 This project is a **proof-of-concept (PoC)** system for automating systematic literature reviews in compliance with the **PRISMA guidelines**, using **Multi-Agent Reinforcement Learning (MARL)** with **Centralized Training and Decentralized Execution (CTDE)**.
@@ -11,9 +10,7 @@ It simulates expert behavior in:
 - PRISMA Rule Compliance
 
 All papers are retrieved from [arXiv.org](https://arxiv.org), filtered and scored by reinforcement learning agents trained with human feedback and reward shaping.
-
 ---
-````
 
 ## 🚀 Features
 
@@ -27,7 +24,7 @@ All papers are retrieved from [arXiv.org](https://arxiv.org), filtered and score
 ---
 
 ## 🧠 Architecture Overview
-
+```markdown
 User Input
 │
 ├──▶ Search Agent ──▶ Title/Abstract Agent ──▶ Full-Text Agent
