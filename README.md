@@ -138,8 +138,8 @@ End year: 2023
 ## Contact Information
 
 **Project Maintainer**: Mohamed Osama  
-**Email**: [M.Osaammaa@gmailcom]  
+**Email**: M.Osaammaa@gmailcom  
 **GitHub**: [https://github.com/MOsama10](https://github.com/MOsama10)  
-**Institution**: [Nile University]  
+**Institution**: Nile University 
 ```
 
