@@ -49,7 +49,7 @@ This project is a **proof-of-concept (PoC)** for automating systematic literatur
 ## 📁 Project Structure
 ```markdown
 
-prisma\_marl\_project/
+prisma_marl_project/
 ├── agents/                   # Modular DQN agents
 │   ├── search\_agent.py
 │   ├── title\_abstract\_filter.py
