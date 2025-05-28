@@ -1,171 +1,137 @@
-
-
-# 📚 PRISMA-MARL: Automated Systematic Literature Review with Multi-Agent Reinforcement Learning
-
-This project is a **proof-of-concept (PoC)** for automating systematic literature reviews based on **PRISMA guidelines**, using a **Multi-Agent Reinforcement Learning (MARL)** system. Each agent operates independently and is trained using **agent-specific reward loops**, evaluated via a dynamic **PRISMA Checker**. All documents are pulled from [arXiv.org](https://arxiv.org).
-
----
-
-## ✨ Features
-
-- 🔍 Automated arXiv search based on topic and date range
-- 🧠 Multi-agent system: search, abstract filter, full-text decision
-- 🧪 PRISMA-based reward functions for each agent
-- 🔁 Centralized Training with Decentralized Execution (CTDE)
-- 📊 Streamlit web interface + CSV/JSON export
-- 💾 Model saving/loading with live evaluation
-
----
-
-## ⚙️ Architecture (Reward Loop)
+Here's a formal `README.md` for your GitHub repository:
 
 ```markdown
+# PRISMA-MARL: Automated Systematic Literature Review with Multi-Agent Reinforcement Learning
 
+## Project Overview
+PRISMA-MARL is an automated system for conducting systematic literature reviews in compliance with the PRISMA 2020 guidelines. The system leverages a Multi-Agent Reinforcement Learning (MARL) framework with Deep Q-Networks (DQNs) to streamline the literature review process through three specialized agents that handle search, abstract screening, and full-text evaluation. The system includes a web interface for user interaction and produces ranked paper lists with PRISMA compliance scores.
 
-                  +--------------------------+
-                  |        User Input        |
-                  +--------------------------+
-                           |
-           +---------------+---------------+---------------+
-           |               |               |               |
-    +------+-----+  +------+-----+  +------+-----+  +------+-----+
-    | Search Agent|  | Abstract Agent|  | FullText Agent|  |   ...      |
-    +------+-----+  +------+-----+  +------+-----+  +------+-----+
-           |               |               |
-    +------+-----+  +------+-----+  +------+-----+
-    | PRISMA Eval |  | PRISMA Eval |  | PRISMA Eval |
-    +------+-----+  +------+-----+  +------+-----+
-           |               |               |
-     Reward + Replay  Reward + Replay  Reward + Replay
-           ↑               ↑               ↑
-           +---------------+---------------+
-                   (Repeat per epoch)
+## Key Features
+- **Automated PRISMA-Compliant Reviews**: Implements the PRISMA 2020 methodology for systematic reviews
+- **Multi-Agent RL Framework**: Three specialized agents working sequentially:
+  - `SearchAgent`: Optimizes search queries for arXiv
+  - `TitleAbstractFilterAgent`: Screens papers based on titles/abstracts
+  - `FullTextAgent`: Evaluates full-text PDFs
+- **Dynamic Reward System**: Combines relevance, diversity, ground truth matching, and PRISMA compliance
+- **User-Friendly Interface**: Streamlit web app for training and inference
+- **Reproducible Research**: Logging and model persistence
+
+## System Architecture
+```mermaid
+graph TD
+    A[User Input] --> B[SearchAgent]
+    B --> C[arXiv Papers]
+    C --> D[TitleAbstractFilterAgent]
+    D --> E[Filtered Papers]
+    E --> F[FullTextAgent]
+    F --> G[Final Papers]
+    G --> H[PRISMA Evaluation]
+    H --> I[Ranked Output]
 ```
 
+## Installation
+### Prerequisites
+- Python 3.8+
+- Operating System: Windows/Linux/macOS
 
+### Setup
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/MOsama10/prisma-marl-review.git
+   cd prisma-marl-review
+   ```
 
----
+2. Create and activate virtual environment:
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # Linux/macOS
+   venv\Scripts\activate    # Windows
+   ```
 
-## 📁 Project Structure
-```markdown
+3. Install dependencies:
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-prisma_marl_project/
-├── agents/                   # Modular DQN agents
-│   ├── search_agent.py
-│   ├── title_abstract_filter.py
-│   ├── full_text_agent.py
-│   ├── prisma_checker.py
-│   └── shared_enhanced_dqn.py
-│
-├── rewards/                 # Custom PRISMA reward logic
-│   └── enhanced_reward_system.py
-│
-├── trainer/                 # Training pipeline
-│   └── train_agents.py
-│
-├── utils/                   # ArXiv interface, tokenizer, etc.
-│   ├── arxiv_interface.py
-│   └── logger.py
-│
-├── models/                  # Saved PyTorch model weights
-│
-├── app.py                   # Streamlit UI
-├── main.py                  # CLI review pipeline
-├── requirements.txt         # Dependencies
-├── README.md
-
-````
-
----
-
-## 🚀 Getting Started
-
-### ✅ 1. Clone the Repo
-
-```bash
-git clone https://github.com/MOsama10/prisma-marl-review.git
-cd prisma-marl-review
-````
-
-### ✅ 2. Create & Activate Virtual Environment
-
-```bash
-python -m venv venv
-venv\Scripts\activate      # Windows
-# or
-source venv/bin/activate   # macOS/Linux
-```
-
-### ✅ 3. Install Requirements
-
-```bash
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
----
-
-## 🔁 Training Agents (Reward Loop)
-
-Train the MARL agents with real arXiv data and PRISMA feedback:
-
+## Usage
+### Training the Agents
 ```bash
 python trainer/train_agents.py
 ```
+Note: Pre-trained models are included in the `models/` directory.
 
-📦 Trained models are saved to `models/`.
+### Running the Web Interface
+```bash
+streamlit run app.py
+```
+The interface allows:
+- Training new models
+- Conducting literature reviews with custom parameters
+- Viewing and exporting results
 
----
-
-## 🧪 CLI Inference Mode
-
-Run the review pipeline interactively from terminal:
-
+### Command Line Interface
 ```bash
 python main.py
 ```
 
-✔ Enter a topic and year range
-📄 Outputs top 10 papers to `results.csv`
-📊 Shows PRISMA compliance score
-
----
-
-## 🌐 Streamlit Web Interface
-
-```bash
-streamlit run app.py
+## Project Structure
+```
+prisma_marl_project/
+├── agents/
+│   ├── search_agent.py
+│   ├── title_abstract_filter.py
+│   ├── full_text_agent.py
+│   ├── prisma_checker.py
+├── rewards/
+│   ├── enhanced_reward_system.py
+├── utils/
+│   ├── arxiv_interface.py
+│   ├── full_text_parser.py
+│   ├── logger.py
+├── trainer/
+│   ├── train_agents.py
+├── models/
+│   ├── search_agent.pth
+│   ├── abstract_agent.pth
+│   ├── fulltext_agent.pth
+├── app.py
+├── main.py
+├── PRISMA_2020_checklist.pdf
+├── prisma.log
+├── requirements.txt
+├── README.md
 ```
 
-Features:
+## Components
+### 1. Agents
+- **SearchAgent**: Modifies search queries using DQN (state: 386D, actions: 5)
+- **TitleAbstractFilterAgent**: Abstract screening (actions: Include/Maybe/Exclude)
+- **FullTextAgent**: Final inclusion decisions
 
-* Topic input + date range
-* Run reviews interactively
-* Download CSV/JSON
-* Train agents from sidebar
-* Visual PRISMA score and relevance ranking
+### 2. PRISMA Checker
+- Validates review process against PRISMA 2020 checklist
+- Computes compliance scores (0-1 scale)
 
----
+### 3. Reward System
+- Four-component reward:
+  1. Relevance (cosine similarity)
+  2. Diversity (1 - pairwise similarity)
+  3. Ground truth matching
+  4. PRISMA compliance
 
-## 📊 PRISMA Compliance Scoring
+## Output
+The system generates:
+1. Ranked CSV of papers with metadata and scores
+2. PRISMA compliance score (0-1)
+3. Persistent models for future use
 
-Each agent receives structured feedback on:
-
-* Search coverage and strategy
-* Abstract clarity and inclusion accuracy
-* Methodology and results from full-text
-* Synthesis and limitation discussion
-
-The global score is calculated from 8 standard PRISMA checkpoints.
-
----
-
-## 👤 Author
-
-**Mohamed Osama**
-GitHub: [@MOsama10](https://github.com/MOsama10)
-
-
-
+## Troubleshooting
+Common issues:
+- **Blank PRISMA Checklist**: Ensure `PRISMA_2020_checklist.pdf` exists in root directory
+- **Training Failures**: Check internet connection for arXiv API access
+- **Dependency Conflicts**: Use exact versions in requirements.txt
 
 
+## Contact
+For questions or contributions, please contact [M.Osaammaa@gmail.com] or open an issue in the repository.
+```
