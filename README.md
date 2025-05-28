@@ -1,6 +1,3 @@
-Here's a formal `README.md` for your GitHub repository:
-
-```markdown
 # PRISMA-MARL: Automated Systematic Literature Review with Multi-Agent Reinforcement Learning
 
 ## Project Overview
