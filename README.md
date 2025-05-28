@@ -131,4 +131,3 @@ Common issues:
 
 ## Contact
 For questions or contributions, please contact [M.Osaammaa@gmail.com] or open an issue in the repository.
-```
