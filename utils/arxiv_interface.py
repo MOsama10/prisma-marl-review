@@ -1,9 +1,8 @@
-# utils/arxiv_interface.py
-
 import arxiv
 from datetime import datetime
 
 def search_arxiv(query, from_year, to_year, max_results=10):
+    client = arxiv.Client()
     search = arxiv.Search(
         query=query,
         max_results=max_results,
@@ -12,7 +11,7 @@ def search_arxiv(query, from_year, to_year, max_results=10):
     )
 
     results = []
-    for paper in search.results():
+    for paper in client.results(search):
         pub_year = paper.published.year
         if from_year <= pub_year <= to_year:
             results.append(paper)

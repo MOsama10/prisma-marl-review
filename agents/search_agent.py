@@ -1,11 +1,9 @@
-# agents/search_agent.py
-
 import os
 from pathlib import Path
 from agents.shared_enhanced_dqn import EnhancedDQNAgent
 
 class SearchAgent:
-    def __init__(self, state_dim=384, action_dim=5, model_dir="models"):
+    def __init__(self, state_dim=386, action_dim=5, model_dir="models"):
         self.agent = EnhancedDQNAgent(state_dim, action_dim)
         self.model_path = Path(model_dir) / "search_agent.pth"
         self.load_model()
@@ -24,4 +22,8 @@ class SearchAgent:
 
     def load_model(self):
         if self.model_path.exists():
-            self.agent.load_model(str(self.model_path))
+            try:
+                self.agent.load_model(str(self.model_path))
+            except RuntimeError as e:
+                print(f"⚠ Warning: Failed to load model due to {e}. Initializing new model.")
+                # Model will remain initialized with random weights

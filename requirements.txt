@@ -15,3 +15,6 @@ gymnasium
 ray[rllib]
 wandb
 streamlit
+PyPDF2
+requests
+pdfplumber>=0.11.4
